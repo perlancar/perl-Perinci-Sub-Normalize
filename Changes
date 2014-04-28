@@ -1,5 +1,12 @@
 Revision history for Perinci-Sub-Normalize
 
+0.02     2014-04-28 (SHARYANTO)
+
+         - Add option: remove_internal_properties (bool, default 0).
+
+         - Fix handling of attributes.
+
+
 0.01     2014-04-28 (SHARYANTO)
 
          - First release.

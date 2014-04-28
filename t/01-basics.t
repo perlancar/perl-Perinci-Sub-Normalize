@@ -8,7 +8,7 @@ use Perinci::Sub::Normalize qw(normalize_function_metadata);
 use Test::Exception;
 use Test::More 0.98;
 
-subtest defaults => sub {
+subtest normalize_function_metadata => sub {
     dies_ok { normalize_function_metadata({}) }
         "doesn't accept v1.0";
     dies_ok { normalize_function_metadata({v=>1.1, foo=>1}) }
@@ -27,6 +27,14 @@ subtest defaults => sub {
     is_deeply(normalize_function_metadata({v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"]} }, result=>{schema=>"array"}}, {normalize_sah_schemas=>0}),
               {v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"]}}, result=>{schema=>"array"}},
               'sah schemas not normalized when using normalize_sah_schemas=>0');
+
+    is_deeply(normalize_function_metadata({v=>1.1, _a=>1}),
+              {v=>1.1, _a=>1},
+              'internal properties not removed');
+    is_deeply(normalize_function_metadata({v=>1.1, _a=>1}, {remove_internal_properties=>1}),
+              {v=>1.1},
+              'internal properties removed when using remove_internal_properties=1');
+
 };
 
 DONE_TESTING:

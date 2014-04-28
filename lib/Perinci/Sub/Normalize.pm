@@ -24,15 +24,19 @@ sub _normalize{
 
     my $opt_aup = $opts->{allow_unknown_properties};
     my $opt_nss = $opts->{normalize_sah_schemas};
-    my $opt_rip = $opts->{_remove_internal_properties};
+    my $opt_rip = $opts->{remove_internal_properties};
 
+  KEY:
     for my $k (keys %$meta) {
         next if $k =~ /\./; # ignore attrs for now
         my $prop = $k;
-        next if $opt_rip && $prop =~ /\A_/;
         my $prop_proplist = $proplist->{$prop};
-        die "Unknown property '$prefix/$prop'"
-            if !$opt_aup && !$prop_proplist;
+        if ($prop =~ /\A_/) {
+            next KEY if $opt_rip;
+        } else {
+            die "Unknown property '$prefix/$prop'"
+                if !$opt_aup && !$prop_proplist;
+        }
         if ($prop_proplist && $prop_proplist->{_prop}) {
             die "Property '$prefix/$prop' must be a hash"
                 unless ref($meta->{$k}) eq 'HASH';
@@ -105,7 +109,7 @@ sub normalize_function_metadata {
 
     $opts->{allow_unknown_properties}    //= 0;
     $opts->{normalize_sah_schemas}       //= 1;
-    $opts->{_remove_internal_properties} //= 0;
+    $opts->{remove_internal_properties}  //= 0;
 
     _normalize($meta, $opts, $sch_proplist, {}, '');
 }
@@ -133,7 +137,19 @@ Available options:
 
 =item * allow_unknown_properties => BOOL (default: 0)
 
+If set to true, will die if there are unknown properties.
+
 =item * normalize_sah_schemas => BOOL (default: 1)
+
+By default, L<Sah> schemas e.g. in C<result/schema> or C<args/*/schema> property
+is normalized using L<Data::Sah>'s C<normalize_schema>. Set this to 0 if you
+don't want this.
+
+=item * remove_internal_properties => BOOL (default: 0)
+
+If set to 1, all properties and attributes starting with underscore (C<_>) with
+will be stripped. According to L<DefHash> specification, they are ignored and
+usually contain notes/comments/extra information.
 
 =back
 

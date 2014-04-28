@@ -28,15 +28,25 @@ sub _normalize{
 
   KEY:
     for my $k (keys %$meta) {
-        next if $k =~ /\./; # ignore attrs for now
+
+        if ($k =~ /\.(\w+)\z/) {
+            my $attr = $1;
+            unless ($attr =~ /\A_/ && $opt_rip) {
+                $nmeta->{$k} = $meta->{$k};
+            }
+            next KEY;
+        }
+
         my $prop = $k;
         my $prop_proplist = $proplist->{$prop};
         if ($prop =~ /\A_/) {
-            next KEY if $opt_rip;
-        } else {
-            die "Unknown property '$prefix/$prop'"
-                if !$opt_aup && !$prop_proplist;
+            unless ($opt_rip) {
+                $nmeta->{$prop} = $meta->{$k};
+            }
+            next KEY;
         }
+        die "Unknown property '$prefix/$prop'"
+            if !$opt_aup && !$prop_proplist;
         if ($prop_proplist && $prop_proplist->{_prop}) {
             die "Property '$prefix/$prop' must be a hash"
                 unless ref($meta->{$k}) eq 'HASH';

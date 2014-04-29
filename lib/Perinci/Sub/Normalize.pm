@@ -125,7 +125,7 @@ sub normalize_function_metadata {
 }
 
 1;
-# ABSTRACT: Normalize Rinci metadata
+# ABSTRACT: Normalize Rinci function metadata
 
 =head1 SYNOPSIS
 
@@ -138,7 +138,7 @@ sub normalize_function_metadata {
 
 =head2 normalize_function_metadata($meta, \%opts) => HASH
 
-Normalize and check Rinci function metadata C<$meta>. Return normalized
+Normalize and check L<Rinci> function metadata C<$meta>. Return normalized
 metadata, which is a shallow copy of C<$meta>. Die on error.
 
 Available options:

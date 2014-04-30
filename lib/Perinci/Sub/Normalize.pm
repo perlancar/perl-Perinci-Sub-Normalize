@@ -45,8 +45,15 @@ sub _normalize{
             }
             next KEY;
         }
-        die "Unknown property '$prefix/$prop'"
-            if !$opt_aup && !$prop_proplist;
+        # try to load module that declare new props first
+        if (!$opt_aup && !$prop_proplist) {
+            if ($prop =~ /\A[A-Za-z][A-Za-z0-9_]*\z/) {
+                my $mod = "Perinci/Sub/Property$prefix/$prop.pm";
+                require $mod;
+            }
+            die "Unknown property '$prefix/$prop'"
+                unless $prop_proplist;
+        }
         if ($prop_proplist && $prop_proplist->{_prop}) {
             die "Property '$prefix/$prop' must be a hash"
                 unless ref($meta->{$k}) eq 'HASH';

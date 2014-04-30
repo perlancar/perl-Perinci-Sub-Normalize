@@ -1,5 +1,11 @@
 Revision history for Perinci-Sub-Normalize
 
+0.03     2014-04-30 (SHARYANTO)
+
+         - Try loading Perinci::Sub::Property::* module first before croaking of
+           unknown property.
+
+
 0.02     2014-04-28 (SHARYANTO)
 
          - Add option: remove_internal_properties (bool, default 0).

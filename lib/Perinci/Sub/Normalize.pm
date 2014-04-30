@@ -49,7 +49,12 @@ sub _normalize{
         if (!$opt_aup && !$prop_proplist) {
             if ($prop =~ /\A[A-Za-z][A-Za-z0-9_]*\z/) {
                 my $mod = "Perinci/Sub/Property$prefix/$prop.pm";
-                require $mod;
+                eval { require $mod };
+                # hide technical error message from require()
+                if ($@) {
+                    die "Unknown property '$prefix/$prop' (and couldn't ".
+                        "load property module)" if $@;
+                }
                 $prop_proplist = $proplist->{$prop};
             }
             die "Unknown property '$prefix/$prop'"

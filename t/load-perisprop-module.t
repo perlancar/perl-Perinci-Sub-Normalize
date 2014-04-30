@@ -8,7 +8,7 @@ use Perinci::Sub::Normalize qw(normalize_function_metadata);
 use Test::Exception;
 use Test::More 0.98;
 
-plan skip_all => "Author testing only"
+plan skip_all => "Release testing only"
     unless $ENV{RELEASE_TESTING};
 
 is_deeply(normalize_function_metadata({v=>1.1, retry=>2}),

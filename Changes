@@ -1,5 +1,19 @@
 Revision history for Perinci-Sub-Normalize
 
+0.04     2014-04-30 (SHARYANTO)
+
+         - No functional changes.
+
+         - Hide error message from Perl's require() which is too technical and
+           exposes @INC (paths).
+
+
+0.03     2014-04-30 (SHARYANTO)
+
+         - Try loading Perinci::Sub::Property::* module first before croaking of
+           unknown property.
+
+
 0.02     2014-04-28 (SHARYANTO)
 
          - Add option: remove_internal_properties (bool, default 0).

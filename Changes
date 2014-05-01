@@ -1,5 +1,15 @@
 Revision history for Perinci-Sub-Normalize
 
+0.05     2014-05-01 (SHARYANTO)
+
+         - No functional changes.
+
+         - Add more test.
+
+         - Bump version requirement of Sah::Schema::Rinci to avoid fail reports
+           [CT].
+
+
 0.04     2014-04-30 (SHARYANTO)
 
          - No functional changes.

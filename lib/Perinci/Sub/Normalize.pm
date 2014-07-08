@@ -110,8 +110,9 @@ sub _normalize{
             }
         } else {
             if ($k eq 'schema' && $opt_nss) { # XXX currently hardcoded
-                require Data::Sah;
-                $nmeta->{$k} = Data::Sah::normalize_schema($meta->{$k});
+                require Data::Sah::Normalize;
+                $nmeta->{$k} = Data::Sah::Normalize::normalize_schema(
+                    $meta->{$k});
             } else {
                 $nmeta->{$k} = $meta->{$k};
             }

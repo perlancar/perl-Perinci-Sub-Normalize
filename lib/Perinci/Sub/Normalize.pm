@@ -1,5 +1,8 @@
 package Perinci::Sub::Normalize;
 
+# DATE
+# VERSION
+
 use 5.010001;
 use strict;
 use warnings;
@@ -15,9 +18,6 @@ my $sch = $Sah::Schema::Rinci::SCHEMAS{rinci_function}
     or die "BUG: Rinci schema structure changed (1)";
 my $sch_proplist = $sch->[1]{_prop}
     or die "BUG: Rinci schema structure changed (2)";
-
-# VERSION
-# DATE
 
 sub _normalize{
     my ($meta, $opts, $proplist, $nmeta, $prefix) = @_;

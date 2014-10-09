@@ -20,15 +20,21 @@ my $sch_proplist = $sch->[1]{_prop}
     or die "BUG: Rinci schema structure changed (2)";
 
 sub _normalize{
-    my ($meta, $opts, $proplist, $nmeta, $prefix) = @_;
+    my ($meta, $ver, $opts, $proplist, $nmeta, $prefix) = @_;
 
     my $opt_aup = $opts->{allow_unknown_properties};
     my $opt_nss = $opts->{normalize_sah_schemas};
     my $opt_rip = $opts->{remove_internal_properties};
 
+    if (defined $ver) {
+        defined($meta->{v}) && $meta->{v} eq $ver
+            or die "$prefix: Metadata version must be $ver";
+    }
+
   KEY:
     for my $k (keys %$meta) {
 
+        # strip attributes prefixed with _ (e.g. args._comment)
         if ($k =~ /\.(\w+)\z/) {
             my $attr = $1;
             unless ($attr =~ /\A_/ && $opt_rip) {
@@ -66,6 +72,7 @@ sub _normalize{
             $nmeta->{$k} = {};
             _normalize(
                 $meta->{$k},
+                $prop_proplist->{_ver},
                 $opts,
                 $prop_proplist->{_prop},
                 $nmeta->{$k},
@@ -81,6 +88,7 @@ sub _normalize{
                 if (ref($_) eq 'HASH') {
                     _normalize(
                         $_,
+                        $prop_proplist->{_ver},
                         $opts,
                         $prop_proplist->{_elem_prop},
                         $href,
@@ -102,6 +110,7 @@ sub _normalize{
                     unless ref($meta->{$k}{$_}) eq 'HASH';
                 _normalize(
                     $meta->{$k}{$_},
+                    $prop_proplist->{_ver},
                     $opts,
                     $prop_proplist->{_value_prop},
                     $nmeta->{$k}{$_},
@@ -127,15 +136,11 @@ sub normalize_function_metadata {
 
     $opts //= {};
 
-    unless (($meta->{v} // 1.0) == 1.1) {
-        die "Can only normalize Rinci 1.1 metadata";
-    }
-
     $opts->{allow_unknown_properties}    //= 0;
     $opts->{normalize_sah_schemas}       //= 1;
     $opts->{remove_internal_properties}  //= 0;
 
-    _normalize($meta, $opts, $sch_proplist, {}, '');
+    _normalize($meta, 1.1, $opts, $sch_proplist, {}, '');
 }
 
 1;

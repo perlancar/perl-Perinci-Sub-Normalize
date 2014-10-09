@@ -34,6 +34,23 @@ subtest normalize_function_metadata => sub {
               {v=>1.1},
               'internal properties removed when using remove_internal_properties=1');
 
+    subtest "arg submeta" => sub {
+        dies_ok { normalize_function_metadata({v=>1.1, args=>{a=>{meta=>{  }}}}) }
+            "doesn't accept v1.0";
+        dies_ok { normalize_function_metadata({v=>1.1, args=>{a=>{meta=>{ v=>1.1, foo=>1 }}}}) }
+            "doesn't allow unknown properties";
+        is_deeply(normalize_function_metadata({v=>1.1, args=>{a=>{meta=>{ v=>1.1, foo=>1 }}}}, {allow_unknown_properties=>1}),
+                  {v=>1.1, args=>{a=>{meta=>{ v=>1.1, foo=>1 }}}},
+                  "unknown properties allowed when using allow_unknown_properties=1");
+        is_deeply(normalize_function_metadata({v=>1.1, args=>{a=>{meta=>
+                                                                      {v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"], cmdline_aliases=>{al1=>{schema=>"bool"}}} }, result=>{schema=>"array"}}
+                                                                  }}}),
+                  {v=>1.1, args=>{a=>{meta=>
+                                          {v=>1.1, args=>{a=>{schema=>["int",{},{}]}, b=>{schema=>["str",{req=>1},{}], cmdline_aliases=>{al1=>{schema=>[bool => {}, {}]}}} }, result=>{schema=>["array",{},{}]}},
+                                  }}},
+                  'sah schemas normalized');
+    };
+
 };
 
 DONE_TESTING:

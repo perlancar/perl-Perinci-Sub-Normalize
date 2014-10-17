@@ -20,7 +20,7 @@ my $sch_proplist = $sch->[1]{_prop}
     or die "BUG: Rinci schema structure changed (2)";
 
 sub _normalize{
-    my ($meta, $ver, $opts, $proplist, $nmeta, $prefix) = @_;
+    my ($meta, $ver, $opts, $proplist, $nmeta, $prefix, $modprefix) = @_;
 
     my $opt_aup = $opts->{allow_unknown_properties};
     my $opt_nss = $opts->{normalize_sah_schemas};
@@ -54,12 +54,13 @@ sub _normalize{
         # try to load module that declare new props first
         if (!$opt_aup && !$prop_proplist) {
             if ($prop =~ /\A[A-Za-z][A-Za-z0-9_]*\z/) {
-                my $mod = "Perinci/Sub/Property$prefix/$prop.pm";
+                $modprefix //= $prefix;
+                my $mod = "Perinci/Sub/Property$modprefix/$prop.pm";
                 eval { require $mod };
                 # hide technical error message from require()
                 if ($@) {
                     die "Unknown property '$prefix/$prop' (and couldn't ".
-                        "load property module)" if $@;
+                        "load property module '$mod')" if $@;
                 }
                 $prop_proplist = $proplist->{$prop};
             }
@@ -115,6 +116,7 @@ sub _normalize{
                     $prop_proplist->{_value_prop},
                     $nmeta->{$k}{$_},
                     "$prefix/$prop/$_",
+                    ($prop eq 'args' ? "$prefix/arg" : undef),
                 );
             }
         } else {

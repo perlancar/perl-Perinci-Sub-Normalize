@@ -1,5 +1,11 @@
 Revision history for Perinci-Sub-Normalize
 
+0.08    2014-10-17 (PERLANCAR)
+
+	- Support loading argument specification property module
+          (Perinci/Sub/Property/arg/<prop>.pm).
+
+
 0.07    2014-10-09 (PERLANCAR)
 
 	- Support argument submetadata (introduced in Rinci 1.1.55).

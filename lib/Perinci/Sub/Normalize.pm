@@ -60,7 +60,7 @@ sub _normalize{
                 # hide technical error message from require()
                 if ($@) {
                     die "Unknown property '$prefix/$prop' (and couldn't ".
-                        "load property module '$mod')" if $@;
+                        "load property module '$mod'): $@" if $@;
                 }
                 $prop_proplist = $proplist->{$prop};
             }

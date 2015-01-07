@@ -1,5 +1,12 @@
 Revision history for Perinci-Sub-Normalize
 
+0.09    2015-01-07 (PERLANCAR)
+
+	- No functional changes.
+
+	- Include require() error in error message.
+
+
 0.08    2014-10-17 (PERLANCAR)
 
 	- Support loading argument specification property module

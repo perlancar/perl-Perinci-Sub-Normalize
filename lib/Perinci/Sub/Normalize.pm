@@ -162,7 +162,7 @@ sub normalize_function_metadata($;$) {
 
 =head1 FUNCTIONS
 
-=head2 normalize_function_metadata($meta, \%opts) => HASH
+=head2 normalize_function_metadata($meta[ , \%opts ]) => HASH
 
 Normalize and check L<Rinci> function metadata C<$meta>. Return normalized
 metadata, which is a shallow copy of C<$meta>. Die on error.

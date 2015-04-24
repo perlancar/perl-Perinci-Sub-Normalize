@@ -43,6 +43,7 @@ sub _normalize{
             next KEY;
         }
 
+        # skip properties prefixed with _ (e.g. _comment)
         my $prop = $k;
         my $prop_proplist = $proplist->{$prop};
         if ($prop =~ /\A_/) {
@@ -51,6 +52,13 @@ sub _normalize{
             }
             next KEY;
         }
+
+        # normalize prop(LANG) to prop.alt.LANG
+        if ($prop =~ /\A(.+)\((\w+)\)\z/) {
+            $nmeta->{"$1.alt.lang.$2"} = $meta->{$k};
+            next KEY;
+        }
+
         # try to load module that declare new props first
         if (!$opt_aup && !$prop_proplist) {
             if ($prop =~ /\A[A-Za-z][A-Za-z0-9_]*\z/) {
@@ -133,7 +141,7 @@ sub _normalize{
     $nmeta;
 }
 
-sub normalize_function_metadata {
+sub normalize_function_metadata($;$) {
     my ($meta, $opts) = @_;
 
     $opts //= {};

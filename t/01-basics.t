@@ -51,6 +51,9 @@ subtest normalize_function_metadata => sub {
                   'sah schemas normalized');
     };
 
+    is_deeply(normalize_function_metadata({v=>1.1, summary=>"foo", "summary(id)" => "fu"}),
+              {v=>1.1, summary=>"foo", "summary.alt.lang.id"=>"fu"},
+              'normalize prop(LANG) to prop.alt.lang.LANG (DefHash 1.0.10)');
 };
 
 DONE_TESTING:

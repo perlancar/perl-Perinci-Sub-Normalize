@@ -53,7 +53,7 @@ sub _normalize{
             next KEY;
         }
 
-        # normalize prop(LANG) to prop.alt.LANG
+        # normalize prop(LANG) to prop.alt.lang.LANG
         if ($prop =~ /\A(.+)\((\w+)\)\z/) {
             $nmeta->{"$1.alt.lang.$2"} = $meta->{$k};
             next KEY;

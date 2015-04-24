@@ -1,5 +1,12 @@
 Revision history for Perinci-Sub-Normalize
 
+0.10    2015-04-24 (PERLANCAR)
+
+        - Normalize 'prop(LANG)' to 'prop.alt.lang.LANG' (DefHash 1.0.10).
+
+        - Add benchmark devscript.
+
+
 0.09    2015-01-07 (PERLANCAR)
 
 	- No functional changes.

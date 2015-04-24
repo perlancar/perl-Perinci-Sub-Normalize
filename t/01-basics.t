@@ -54,6 +54,8 @@ subtest normalize_function_metadata => sub {
     is_deeply(normalize_function_metadata({v=>1.1, summary=>"foo", "summary(id)" => "fu"}),
               {v=>1.1, summary=>"foo", "summary.alt.lang.id"=>"fu"},
               'normalize prop(LANG) to prop.alt.lang.LANG (DefHash 1.0.10)');
+    # regression in 0.10
+    dies_ok { normalize_function_metadata({v=>1.1, "summary (id)" => "fu"}) } "property/attribute name still checked after normalization of prop(LANG)";
 };
 
 DONE_TESTING:

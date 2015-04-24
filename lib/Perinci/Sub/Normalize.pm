@@ -33,64 +33,61 @@ sub _normalize{
 
   KEY:
     for my $k (keys %$meta) {
+        die "Invalid prop/attr syntax '$k', must be word/dotted-word only"
+            unless $k =~ /\A(\w+)(?:\.(\w+(?:\.\w+)*))?(?:\((\w+)\))?\z/;
 
-        # strip attributes prefixed with _ (e.g. args._comment)
-        if ($k =~ /\.(\w+)\z/) {
-            my $attr = $1;
-            unless ($attr =~ /\A_/ && $opt_rip) {
-                $nmeta->{$k} = $meta->{$k};
-            }
-            next KEY;
+        my ($prop, $attr);
+        if (defined $3) {
+            $prop = $1;
+            $attr = defined($2) ? "$2.alt.lang.$3" : "alt.lang.$3";
+        } else {
+            $prop = $1;
+            $attr = $2;
         }
 
-        # skip properties prefixed with _ (e.g. _comment)
-        my $prop = $k;
-        my $prop_proplist = $proplist->{$prop};
-        if ($prop =~ /\A_/) {
+        my $nk = "$prop" . (defined($attr) ? ".$attr" : "");
+
+        # strip property/attr started with _
+        if ($prop =~ /\A_/ || defined($attr) && $attr =~ /\A_|\._/) {
             unless ($opt_rip) {
-                $nmeta->{$prop} = $meta->{$k};
+                $nmeta->{$nk} = $meta->{$k};
             }
             next KEY;
         }
 
-        # normalize prop(LANG) to prop.alt.lang.LANG
-        if ($prop =~ /\A(.+)\((\w+)\)\z/) {
-            $nmeta->{"$1.alt.lang.$2"} = $meta->{$k};
-            next KEY;
-        }
+        my $prop_proplist = $proplist->{$prop};
 
         # try to load module that declare new props first
         if (!$opt_aup && !$prop_proplist) {
-            if ($prop =~ /\A[A-Za-z][A-Za-z0-9_]*\z/) {
-                $modprefix //= $prefix;
-                my $mod = "Perinci/Sub/Property$modprefix/$prop.pm";
-                eval { require $mod };
-                # hide technical error message from require()
-                if ($@) {
-                    die "Unknown property '$prefix/$prop' (and couldn't ".
-                        "load property module '$mod'): $@" if $@;
-                }
-                $prop_proplist = $proplist->{$prop};
+            $modprefix //= $prefix;
+            my $mod = "Perinci/Sub/Property$modprefix/$prop.pm";
+            eval { require $mod };
+            # hide technical error message from require()
+            if ($@) {
+                die "Unknown property '$prefix/$prop' (and couldn't ".
+                    "load property module '$mod'): $@" if $@;
             }
-            die "Unknown property '$prefix/$prop'"
-                unless $prop_proplist;
+            $prop_proplist = $proplist->{$prop};
         }
+        die "Unknown property '$prefix/$prop'"
+            unless $opt_aup || $prop_proplist;
+
         if ($prop_proplist && $prop_proplist->{_prop}) {
             die "Property '$prefix/$prop' must be a hash"
                 unless ref($meta->{$k}) eq 'HASH';
-            $nmeta->{$k} = {};
+            $nmeta->{$nk} = {};
             _normalize(
                 $meta->{$k},
                 $prop_proplist->{_ver},
                 $opts,
                 $prop_proplist->{_prop},
-                $nmeta->{$k},
+                $nmeta->{$nk},
                 "$prefix/$prop",
             );
         } elsif ($prop_proplist && $prop_proplist->{_elem_prop}) {
             die "Property '$prefix/$prop' must be an array"
                 unless ref($meta->{$k}) eq 'ARRAY';
-            $nmeta->{$k} = [];
+            $nmeta->{$nk} = [];
             my $i = 0;
             for (@{ $meta->{$k} }) {
                 my $href = {};
@@ -103,18 +100,18 @@ sub _normalize{
                         $href,
                         "$prefix/$prop/$i",
                     );
-                    push @{ $nmeta->{$k} }, $href;
+                    push @{ $nmeta->{$nk} }, $href;
                 } else {
-                    push @{ $nmeta->{$k} }, $_;
+                    push @{ $nmeta->{$nk} }, $_;
                 }
                 $i++;
             }
         } elsif ($prop_proplist && $prop_proplist->{_value_prop}) {
             die "Property '$prefix/$prop' must be a hash"
                 unless ref($meta->{$k}) eq 'HASH';
-            $nmeta->{$k} = {};
+            $nmeta->{$nk} = {};
             for (keys %{ $meta->{$k} }) {
-                $nmeta->{$k}{$_} = {};
+                $nmeta->{$nk}{$_} = {};
                 die "Property '$prefix/$prop/$_' must be a hash"
                     unless ref($meta->{$k}{$_}) eq 'HASH';
                 _normalize(
@@ -122,7 +119,7 @@ sub _normalize{
                     $prop_proplist->{_ver},
                     $opts,
                     $prop_proplist->{_value_prop},
-                    $nmeta->{$k}{$_},
+                    $nmeta->{$nk}{$_},
                     "$prefix/$prop/$_",
                     ($prop eq 'args' ? "$prefix/arg" : undef),
                 );
@@ -130,10 +127,10 @@ sub _normalize{
         } else {
             if ($k eq 'schema' && $opt_nss) { # XXX currently hardcoded
                 require Data::Sah::Normalize;
-                $nmeta->{$k} = Data::Sah::Normalize::normalize_schema(
+                $nmeta->{$nk} = Data::Sah::Normalize::normalize_schema(
                     $meta->{$k});
             } else {
-                $nmeta->{$k} = $meta->{$k};
+                $nmeta->{$nk} = $meta->{$k};
             }
         }
     }

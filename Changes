@@ -1,5 +1,12 @@
 Revision history for Perinci-Sub-Normalize
 
+0.13    2015-09-30 (PERLANCAR)
+
+	- No functional changes.
+
+	- Bump prereq Sah::Schema::Rinci to 1.1.78.
+
+
 0.12    2015-09-04 (PERLANCAR)
 
 	- No functional changes.

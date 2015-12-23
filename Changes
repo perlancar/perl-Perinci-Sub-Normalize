@@ -1,5 +1,15 @@
 Revision history for Perinci-Sub-Normalize
 
+0.14    2015-12-23 (PERLANCAR)
+
+	- Move accessing %Sah::Schema::Rinci::SCHEMAS inside function, to
+	  allow more flexibility (e.g. Sah::Schema::Rinci reloaded between
+	  invocation).
+
+	- Remove devscripts/bench (see
+	  Bencher::Scenario::Perinci::Sub::Normalize now).
+
+
 0.13    2015-09-30 (PERLANCAR)
 
 	- No functional changes.

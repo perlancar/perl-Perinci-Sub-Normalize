@@ -13,12 +13,6 @@ our @EXPORT_OK = qw(
                        normalize_function_metadata
                );
 
-use Sah::Schema::Rinci;
-my $sch = $Sah::Schema::Rinci::SCHEMAS{rinci_function}
-    or die "BUG: Rinci schema structure changed (1)";
-my $sch_proplist = $sch->[1]{_prop}
-    or die "BUG: Rinci schema structure changed (2)";
-
 sub _normalize{
     my ($meta, $ver, $opts, $proplist, $nmeta, $prefix, $modprefix) = @_;
 
@@ -146,6 +140,12 @@ sub normalize_function_metadata($;$) {
     $opts->{allow_unknown_properties}    //= 0;
     $opts->{normalize_sah_schemas}       //= 1;
     $opts->{remove_internal_properties}  //= 0;
+
+    require Sah::Schema::Rinci;
+    my $sch = $Sah::Schema::Rinci::SCHEMAS{rinci_function}
+        or die "BUG: Rinci schema structure changed (1)";
+    my $sch_proplist = $sch->[1]{_prop}
+        or die "BUG: Rinci schema structure changed (2)";
 
     _normalize($meta, 1.1, $opts, $sch_proplist, {}, '');
 }

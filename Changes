@@ -1,5 +1,11 @@
 Revision history for Perinci-Sub-Normalize
 
+0.15    2016-01-07 (PERLANCAR)
+
+	- Downgrade dependency to Perinci::Sub::Property::retry optional,
+	  to avoid circular dependency problem [RT#110958].
+
+
 0.14    2015-12-23 (PERLANCAR)
 
 	- Move accessing %Sah::Schema::Rinci::SCHEMAS inside function, to

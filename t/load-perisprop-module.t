@@ -14,6 +14,12 @@ subtest retry => sub {
 
     is_deeply(normalize_function_metadata({v=>1.1, retry=>2}),
               {v=>1.1, retry=>2});
+};
+
+subtest retry => sub {
+    plan skip_all => "Perinci::Sub::Property::result::table not installed"
+        unless eval { require Perinci::Sub::Property::result::table; 1 };
+
     is_deeply(normalize_function_metadata({v=>1.1, result=>{table=>{}}}),
               {v=>1.1, result=>{table=>{}}});
 };

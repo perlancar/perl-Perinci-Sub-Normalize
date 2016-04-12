@@ -1,5 +1,12 @@
 Revision history for Perinci-Sub-Normalize
 
+0.16    2016-04-12 (PERLANCAR)
+
+        - No functional changes.
+
+        - Fix test [RT#113688].
+
+
 0.15    2016-01-07 (PERLANCAR)
 
 	- Downgrade dependency to Perinci::Sub::Property::retry optional,

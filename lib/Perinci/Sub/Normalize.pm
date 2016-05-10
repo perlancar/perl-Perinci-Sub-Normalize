@@ -141,11 +141,10 @@ sub normalize_function_metadata($;$) {
     $opts->{normalize_sah_schemas}       //= 1;
     $opts->{remove_internal_properties}  //= 0;
 
-    require Sah::Schema::Rinci;
-    my $sch = $Sah::Schema::Rinci::SCHEMAS{rinci_function}
-        or die "BUG: Rinci schema structure changed (1)";
+    require Sah::Schema::rinci::function_meta;
+    my $sch = $Sah::Schema::rinci::function_meta::schema;
     my $sch_proplist = $sch->[1]{_prop}
-        or die "BUG: Rinci schema structure changed (2)";
+        or die "BUG: Rinci schema structure changed (1a)";
 
     _normalize($meta, 1.1, $opts, $sch_proplist, {}, '');
 }

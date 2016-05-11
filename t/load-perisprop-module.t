@@ -9,16 +9,16 @@ use Test::Exception;
 use Test::More 0.98;
 
 subtest retry => sub {
-    plan skip_all => "Perinci::Sub::Property::retry not installed"
-        unless eval { require Perinci::Sub::Property::retry; 1 };
+    plan skip_all => "Perinci::Sub::Property::retry 0.10 not installed"
+        unless eval "use Perinci::Sub::Property::retry 0.10; 1";
 
     is_deeply(normalize_function_metadata({v=>1.1, retry=>2}),
               {v=>1.1, retry=>2});
 };
 
 subtest retry => sub {
-    plan skip_all => "Perinci::Sub::Property::result::table not installed"
-        unless eval { require Perinci::Sub::Property::result::table; 1 };
+    plan skip_all => "Perinci::Sub::Property::result::table 0.08 not installed"
+        unless eval "use Perinci::Sub::Property::result::table 0.08; 1";
 
     is_deeply(normalize_function_metadata({v=>1.1, result=>{table=>{}}}),
               {v=>1.1, result=>{table=>{}}});

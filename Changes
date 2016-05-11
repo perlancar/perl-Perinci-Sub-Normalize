@@ -1,5 +1,18 @@
 Revision history for Perinci-Sub-Normalize
 
+0.18    2016-05-11 (PERLANCAR)
+
+        - [test] Bump optional test prereq version
+          Perinci::Sub::Property::{test,result::table} to avoid test failures
+          [RT#114308].
+
+
+0.17    2016-05-10 (PERLANCAR)
+
+        - Update to Sah::Schema::rinci::function_meta which replaces
+          Sah::Schema::Rinci.
+
+
 0.16    2016-04-12 (PERLANCAR)
 
         - No functional changes.

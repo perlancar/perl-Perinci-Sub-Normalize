@@ -1,5 +1,13 @@
 Revision history for Perinci-Sub-Normalize
 
+0.19    2016-12-11 (PERLANCAR)
+
+	- No functional changes.
+
+	- Bump prereq version Sah::Schema::rinci::function_meta to 1.1.82
+	  (introduced 'index_completion' argument spec property).
+
+
 0.18    2016-05-11 (PERLANCAR)
 
         - [test] Bump optional test prereq version

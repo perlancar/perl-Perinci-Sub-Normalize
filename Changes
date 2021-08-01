@@ -1,3 +1,9 @@
+0.202   2021-08-01  Released-By: PERLANCAR; Urgency: medium
+
+	- Bump prereq version Sah::Schema::rinci::function_meta to 1.1.96.0
+	  (RT#138252).
+
+
 0.201   2021-08-01  Released-By: PERLANCAR; Urgency: medium
 
 	- Update test to newer Data::Sah::Normalize (0.051) (RT#138212).

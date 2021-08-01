@@ -21,7 +21,7 @@ subtest normalize_function_metadata => sub {
               {v=>1.1, args=>{}, "summary.alt.lang.id_ID"=>"tes"},
               "properties and attributes not changed");
     is_deeply(normalize_function_metadata({v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"], cmdline_aliases=>{al1=>{schema=>"bool"}}} }, result=>{schema=>"array"}}),
-              {v=>1.1, args=>{a=>{schema=>["int",{},{}]}, b=>{schema=>["str",{req=>1},{}], cmdline_aliases=>{al1=>{schema=>[bool => {}, {}]}}} }, result=>{schema=>["array",{},{}]}},
+              {v=>1.1, args=>{a=>{schema=>["int",{}]}, b=>{schema=>["str",{req=>1}], cmdline_aliases=>{al1=>{schema=>[bool => {}]}}} }, result=>{schema=>["array",{}]}},
               'sah schemas normalized');
     is_deeply(normalize_function_metadata({v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"]} }, result=>{schema=>"array"}}, {normalize_sah_schemas=>0}),
               {v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"]}}, result=>{schema=>"array"}},
@@ -46,7 +46,7 @@ subtest normalize_function_metadata => sub {
                                                                       {v=>1.1, args=>{a=>{schema=>"int"}, b=>{schema=>["str*"], cmdline_aliases=>{al1=>{schema=>"bool"}}} }, result=>{schema=>"array"}}
                                                                   }}}),
                   {v=>1.1, args=>{a=>{meta=>
-                                          {v=>1.1, args=>{a=>{schema=>["int",{},{}]}, b=>{schema=>["str",{req=>1},{}], cmdline_aliases=>{al1=>{schema=>[bool => {}, {}]}}} }, result=>{schema=>["array",{},{}]}},
+                                          {v=>1.1, args=>{a=>{schema=>["int",{}]}, b=>{schema=>["str",{req=>1}], cmdline_aliases=>{al1=>{schema=>[bool => {}]}}} }, result=>{schema=>["array",{}]}},
                                   }}},
                   'sah schemas normalized');
     };

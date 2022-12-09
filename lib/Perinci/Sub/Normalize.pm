@@ -1,19 +1,58 @@
 package Perinci::Sub::Normalize;
 
-# DATE
-# VERSION
-
 use 5.010001;
 use strict;
 use warnings;
 
-require Exporter;
-our @ISA = qw(Exporter);
+use Exporter 'import';
+
+# AUTHORITY
+# DATE
+# DIST
+# VERSION
+
 our @EXPORT_OK = qw(
                        normalize_function_metadata
                );
 
-sub _normalize{
+sub _check {
+    my $meta = shift; # must be normalized
+
+  CHECK_ARGS: {
+        my $argspecs = $meta->{args};
+      CHECK_ARGS_POS: {
+            my @pos;
+            my $slurpy_pos;
+            for my $argname (keys %$argspecs) {
+                my $argspec = $argspecs->{$argname};
+                if (defined $argspec->{pos}) {
+                    return "Argument $argname: Negative pos" if $argspec->{pos} < 0;
+                    return "Duplicate position $argspec->{pos}" if defined $pos[ $argspec->{pos} ];
+                    $pos[ $argspec->{pos} ] = $argname;
+                }
+                if ($argspec->{slurpy}) {
+                    return "Argument $argname: slurpy=1 without setting pos"
+                        unless defined $argspec->{pos};
+                    return "Multiple args with slurpy=1" if defined $slurpy_pos;
+                }
+            }
+            if (defined $slurpy_pos && $slurpy_pos < @pos) {
+                return "Clash of argument positions: slurpy=1 defined for pos >= $slurpy_pos but there is another argument with pos > $slurpy_pos";
+            }
+            # we have holes
+            return "There needs to be more arguments that define pos"
+                if grep { defined } @pos;
+            if ($meta->{args_as} && $meta->{args_as} =~ /\Aarray(ref)?\z/) {
+                return "Function accepts array/arrayref but there are arguments with no pos defined"
+                    if scalar(keys %$argspecs) > @pos;
+            }
+        }
+    }
+
+    undef;
+}
+
+sub _normalize {
     my ($meta, $ver, $opts, $proplist, $nmeta, $prefix, $modprefix) = @_;
 
     my $opt_aup = $opts->{allow_unknown_properties};
@@ -127,8 +166,7 @@ sub _normalize{
                 $nmeta->{$nk} = $meta->{$k};
             }
         }
-    }
-
+    } # for each key
     $nmeta;
 }
 
@@ -146,7 +184,12 @@ sub normalize_function_metadata($;$) {
     my $sch_proplist = $sch->[1]{_prop}
         or die "BUG: Rinci schema structure changed (1a)";
 
-    _normalize($meta, 1.1, $opts, $sch_proplist, {}, '');
+    my $nmeta = _normalize($meta, 1.1, $opts, $sch_proplist, {}, '');
+
+    my $err = _check($meta);
+    die $err if $err;
+
+    $nmeta;
 }
 
 1;

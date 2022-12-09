@@ -41,7 +41,7 @@ sub _check {
             }
             # we have holes
             return "There needs to be more arguments that define pos"
-                if grep { defined } @pos;
+                if grep { !defined } @pos;
             if ($meta->{args_as} && $meta->{args_as} =~ /\Aarray(ref)?\z/) {
                 return "Function accepts array/arrayref but there are arguments with no pos defined"
                     if scalar(keys %$argspecs) > @pos;

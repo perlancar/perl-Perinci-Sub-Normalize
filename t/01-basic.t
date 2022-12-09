@@ -60,6 +60,10 @@ subtest normalize_function_metadata => sub {
     subtest "check" => sub {
         subtest "check args" => sub {
             subtest "check args pos" => sub {
+                lives_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', pos=>0}}}) }
+                    'basics 1';
+                lives_ok { normalize_function_metadata({v=>1.1, args=>{ a1=>{schema=>'int*', pos=>0}, a2=>{schema=>'int*', pos=>1}, a3=>{schema=>'int*', pos=>2} }}) }
+                    'basics 2';
                 dies_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', pos=>1}}}) }
                     'Missing argument with pos=0';
                 dies_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', pos=>0}, a2=>{schema=>'int*', pos=>0}}}) }

@@ -34,10 +34,11 @@ sub _check {
                     return "Argument $argname: slurpy=1 without setting pos"
                         unless defined $argspec->{pos};
                     return "Multiple args with slurpy=1" if defined $slurpy_pos;
+                    $slurpy_pos = $argspec->{pos};
                 }
             }
             if (defined $slurpy_pos && $slurpy_pos < @pos) {
-                return "Clash of argument positions: slurpy=1 defined for pos >= $slurpy_pos but there is another argument with pos > $slurpy_pos";
+                return "Clash of argument positions: slurpy=1 defined for pos=$slurpy_pos but there is another argument with pos > $slurpy_pos";
             }
             # we have holes
             return "There needs to be more arguments that define pos"

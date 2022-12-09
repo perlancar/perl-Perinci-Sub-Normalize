@@ -1,3 +1,9 @@
+0.203   2022-12-09  Released-By: PERLANCAR; Urgency: medium
+
+        - Perform some checks on function metadata (currently only check
+          pos/slurpy).
+
+
 0.202   2021-08-01  Released-By: PERLANCAR; Urgency: medium
 
 	- Bump prereq version Sah::Schema::rinci::function_meta to 1.1.96.0

@@ -170,7 +170,7 @@ sub _normalize {
     $nmeta;
 }
 
-sub normalize_function_metadata($;$) {
+sub normalize_function_metadata($;$) { ## no critic: Subroutines::ProhibitSubroutinePrototypes
     my ($meta, $opts) = @_;
 
     $opts //= {};

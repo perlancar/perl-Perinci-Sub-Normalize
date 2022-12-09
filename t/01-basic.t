@@ -72,6 +72,8 @@ subtest normalize_function_metadata => sub {
                     'Negative pos';
                 dies_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', slurpy=>1}}}) }
                     'Slurpy without pos';
+                dies_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', greedy=>1}}}) }
+                    'greedy property still observed';
                 dies_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', pos=>0, slurpy=>1}, a1=>{schema=>'int*', pos=>1, slurpy=>1}}}) }
                     'Multiple slurpies';
                 dies_ok { normalize_function_metadata({v=>1.1, args=>{a1=>{schema=>'int*', pos=>0, slurpy=>1}, a1=>{schema=>'int*', pos=>1}}}) }

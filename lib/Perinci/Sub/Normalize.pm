@@ -30,7 +30,7 @@ sub _check {
                     return "Duplicate position $argspec->{pos}" if defined $pos[ $argspec->{pos} ];
                     $pos[ $argspec->{pos} ] = $argname;
                 }
-                if ($argspec->{slurpy}) {
+                if ($argspec->{slurpy} || $argspec->{greedy}) { # greedy is deprecated, but we should keep observing to make us properly strict
                     return "Argument $argname: slurpy=1 without setting pos"
                         unless defined $argspec->{pos};
                     return "Multiple args with slurpy=1" if defined $slurpy_pos;
